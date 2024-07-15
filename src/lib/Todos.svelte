@@ -136,7 +136,7 @@
                       value=""
                       id="flexCheckChecked1"
                       aria-label="..."
-                      checked
+                      bind:checked={todo.is_done}
                     />
                   </div>
                 </li>
