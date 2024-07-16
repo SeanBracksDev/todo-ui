@@ -1,10 +1,14 @@
 <script lang="ts">
   import type { TodoType } from "./crud";
-
+  import { deleteTodo, toggleTodo } from "./crud";
   export let todo: TodoType;
+  let todoRef: HTMLElement;
 </script>
 
-<ul class="list-group list-group-horizontal rounded-0 bg-transparent">
+<ul
+  bind:this={todoRef}
+  class="list-group list-group-horizontal rounded-0 bg-transparent"
+>
   <li
     class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent"
   >
@@ -16,6 +20,7 @@
         id="flexCheckChecked1"
         aria-label="..."
         bind:checked={todo.is_done}
+        on:click={() => toggleTodo(todo)}
       />
     </div>
   </li>
@@ -29,8 +34,17 @@
       <a href="#!" class="text-info" data-mdb-tooltip-init title="Edit todo"
         ><i class="fas fa-pencil-alt me-3"></i></a
       >
-      <a href="#!" class="text-danger" data-mdb-tooltip-init title="Delete todo"
-        ><i class="fas fa-trash-alt"></i></a
+      <a
+        href="#!"
+        class="text-danger"
+        data-mdb-tooltip-init
+        title="Delete todo"
+        on:click={() => {
+          deleteTodo(todo.id);
+          if (todoRef.parentNode !== null) {
+            todoRef.parentNode.removeChild(todoRef);
+          }
+        }}><i class="fas fa-trash-alt"></i></a
       >
     </div>
     <div class="text-end text-muted">
@@ -41,7 +55,17 @@
         title="Created date"
       >
         <p class="small mb-0">
-          <i class="fas fa-info-circle me-2"></i>28th Jun 2020 <!-- dynamically populate datetime here-->
+          <i class="fas fa-info-circle me-2"></i>{new Date(
+            todo.created_at
+          ).toLocaleDateString("en-UK", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+          })}
         </p>
       </a>
     </div>
