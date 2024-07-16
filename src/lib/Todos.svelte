@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Todo from "./Todo.svelte";
   import type { TodoType } from "./crud";
-  import { getTodos, postTodo, todoApiUrl } from "./crud";
+  import { getTodos, todoApiUrl } from "./crud";
 
   let todos: TodoType[];
   $: todos = [];
@@ -10,7 +10,6 @@
   onMount(async () => getTodos().then((data) => (todos = data)));
 
   function createTodo() {
-    console.log("Creating todo...");
     const headers: Headers = new Headers();
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
@@ -42,11 +41,7 @@
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col">
-        <div
-          class="card"
-          id="list1"
-          style="border-radius: .75rem; background-color: #eff1f2;"
-        >
+        <div class="card" id="list1">
           <div class="card-body py-4 px-4 px-md-5">
             <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
               <i class="fas fa-check-square me-1"></i>
@@ -56,25 +51,23 @@
             <div class="pb-2">
               <div class="card">
                 <div class="card-body">
-                  <div class="d-flex flex-row align-items-center">
+                  <form class="d-flex flex-row align-items-center">
                     <input
                       type="text"
                       class="form-control form-control-lg"
                       id="exampleFormControlInput1"
                       placeholder="Add new..."
                     />
-                    <div>
-                      <button
-                        type="button"
-                        data-mdb-button-init
-                        data-mdb-ripple-init
-                        class="btn btn-primary"
-                        on:click={createTodo}
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
+                    <button
+                      type="submit"
+                      data-mdb-button-init
+                      data-mdb-ripple-init
+                      class="btn btn-primary"
+                      on:click|preventDefault={createTodo}
+                    >
+                      Add
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -122,5 +115,11 @@
   #list1 .form-control:focus {
     border-color: transparent;
     box-shadow: none;
+  }
+
+  #list1 {
+    border-radius: 0.75rem;
+    background-color: #eff1f2;
+    margin-bottom: 50px;
   }
 </style>
