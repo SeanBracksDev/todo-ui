@@ -6,8 +6,13 @@
 
   let todos: TodoType[];
   $: todos = [];
+  let fetchError: string;
 
-  onMount(async () => getTodos().then((data) => (todos = data)));
+  onMount(async () =>
+    getTodos()
+      .then((data) => (todos = data))
+      .catch((error) => (fetchError = error))
+  );
 
   function createTodo() {
     const headers: Headers = new Headers();
@@ -97,6 +102,11 @@
                 ><i class="fas fa-sort-amount-down-alt ms-2"></i></a
               >
             </div>
+            {#if fetchError}
+              <div class="alert alert-danger" role="alert">
+                Could not fetch todos: "{fetchError}"
+              </div>
+            {/if}
             {#each todos as todo (todo.id)}
               <!-- TODO implement deleting & completing todos -->
               <Todo {todo} />
