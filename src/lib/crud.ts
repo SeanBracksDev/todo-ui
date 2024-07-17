@@ -71,3 +71,17 @@ export async function toggleTodo(todo: TodoType) {
 
   fetch(request);
 }
+
+export async function updateTodoName(todo: TodoType, name: string) {
+  const headers: Headers = new Headers();
+  headers.set("Content-Type", "application/json");
+  headers.set("Accept", "application/json");
+
+  const request: RequestInfo = new Request(`${todoApiUrl}/todos/${todo.id}`, {
+    method: "PATCH",
+    headers: headers,
+    body: JSON.stringify({ name: name }),
+  });
+
+  fetch(request);
+}

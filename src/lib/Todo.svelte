@@ -1,8 +1,25 @@
 <script lang="ts">
   import type { TodoType } from "./crud";
-  import { deleteTodo, toggleTodo } from "./crud";
+  import { deleteTodo, toggleTodo, updateTodoName } from "./crud";
   export let todo: TodoType;
   let todoRef: HTMLElement;
+
+  async function updateTodoNameHandler() {
+    let todoNameElement = document.getElementById(`todo-name-${todo.id}`);
+    if (todoNameElement !== null) {
+      todoNameElement.setAttribute("disabled", "true");
+    }
+
+    let todoNameSaveBtn = document.getElementById(`todo-name-save-${todo.id}`);
+    if (todoNameSaveBtn !== null) {
+      todoNameSaveBtn.style.display = "none";
+    }
+
+    let todoName = todoNameElement?.value;
+    if (todoName !== undefined && todoName !== todo.name) {
+      await updateTodoName(todo, todoName);
+    }
+  }
 </script>
 
 <ul
@@ -35,6 +52,11 @@
       value={todo.name}
       disabled
     />
+    <button
+      id="todo-name-save-{todo.id}"
+      class="btn btn-sm btn-outline-primary ms-1 todo-name-save"
+      on:click={updateTodoNameHandler}>Save</button
+    >
   </li>
   <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
     <div class="d-flex flex-row justify-content-end mb-1">
@@ -46,6 +68,14 @@
         on:click={() => {
           let todoNameElement = document.getElementById(`todo-name-${todo.id}`);
           todoNameElement?.removeAttribute("disabled");
+          todoNameElement?.focus();
+
+          let todoNameSaveBtn = document.getElementById(
+            `todo-name-save-${todo.id}`
+          );
+          if (todoNameSaveBtn !== null) {
+            todoNameSaveBtn.style.display = "block";
+          }
         }}><i class="fas fa-pencil-alt me-3"></i></a
       >
       <a
@@ -72,7 +102,7 @@
           <i class="fas fa-info-circle me-2"></i>{new Date(
             todo.created_at
           ).toLocaleDateString("en-UK", {
-            weekday: "long",
+            weekday: "short",
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -87,9 +117,16 @@
 </ul>
 
 <style>
+  .todo-name {
+    width: 80%;
+  }
   .todo-name:disabled {
     border-color: transparent;
     background-color: transparent;
     color: black;
+  }
+  .todo-name-save {
+    display: none;
+    border-width: 2px;
   }
 </style>
