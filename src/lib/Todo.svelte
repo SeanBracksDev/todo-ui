@@ -27,12 +27,26 @@
   <li
     class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent"
   >
-    <p class="lead fw-normal mb-0">{todo.name}</p>
+    <input
+      type="text"
+      id="todo-name-{todo.id}"
+      class="lead fw-normal mb-0 todo-name"
+      contenteditable="false"
+      value={todo.name}
+      disabled
+    />
   </li>
   <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
     <div class="d-flex flex-row justify-content-end mb-1">
-      <a href="#!" class="text-info" data-mdb-tooltip-init title="Edit todo"
-        ><i class="fas fa-pencil-alt me-3"></i></a
+      <a
+        href="#!"
+        class="text-info"
+        data-mdb-tooltip-init
+        title="Edit todo"
+        on:click={() => {
+          let todoNameElement = document.getElementById(`todo-name-${todo.id}`);
+          todoNameElement?.removeAttribute("disabled");
+        }}><i class="fas fa-pencil-alt me-3"></i></a
       >
       <a
         href="#!"
@@ -73,4 +87,9 @@
 </ul>
 
 <style>
+  .todo-name:disabled {
+    border-color: transparent;
+    background-color: transparent;
+    color: black;
+  }
 </style>
